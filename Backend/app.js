@@ -1,7 +1,10 @@
 const express = require('express');
 const authRoutes = require('./routes/AuthRoute');
-
+const ConnectToDb = require('./config/databaseConfig')
 const app = express();
+
+//connection to database
+ConnectToDb();
 
 //convert serialized data to json format
 app.use(express.json());
@@ -15,3 +18,4 @@ app.use('/', (req, res)=>{
 })
 
 module.exports = app;
+
