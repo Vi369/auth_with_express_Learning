@@ -62,7 +62,7 @@ const signIn = async (req, res)=>{
       })
    }
    try {
-      const user = userModel
+      const user = await userModel
       .findOne({
          email
       })
@@ -74,8 +74,26 @@ const signIn = async (req, res)=>{
          })
       }
 
+      // creating token
+      const token = user.jwtToken();
+      user.password = undefined;
+
+      const cookieOptions = {
+         maxAge: 24*60*60*100,
+         httpOnly: true,
+      }
+
+      res.cookie("token", token, cookieOptions)
+      res.status(200).json({
+         success: true,
+         data: user
+      })
+
    } catch (error) {
-      
+      res.status(400).json({
+         success: false,
+         message: error.message
+      })
    }
 }
 
